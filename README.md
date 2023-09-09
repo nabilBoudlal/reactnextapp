@@ -9,4 +9,5 @@
 
 - Gestione dei compiti (To-Do) con la possibilità di modificare, eliminare e contrassegnare come completati.
 - Autenticazione degli utenti tramite Firebase.
-- CloudFirestore 
+- CloudFirestore
+- TailwindCSS
