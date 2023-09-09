@@ -11,6 +11,10 @@ export default function Modal(props) {
     set_document(document);
   }, []);
 
+  /* This code block is a conditional rendering statement. It checks if the `_document` variable is
+  null or not. If `_document` is null, it returns `null`, which means nothing will be rendered. If
+  `_document` is not null, it uses `ReactDOM.createPortal()` to create a portal and render the JSX
+  code inside it. */
   if (!_document) {
     return null;
   }

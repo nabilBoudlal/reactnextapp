@@ -6,13 +6,8 @@ import UserDashboard from "@/components/UserDashboard";
 
 function Home() {
   const { currentUser } = useAuth();
-
   return (
     <>
-      <Head>
-        <title>Create Next App</title>
-        <meta name="description" content="Generated"></meta>
-      </Head>
       {!currentUser && <Login />}
       {currentUser && <UserDashboard />}
     </>

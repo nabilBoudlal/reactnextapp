@@ -10,7 +10,11 @@ function ReminderCard(props) {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedValue, setEditedValue] = useState(reminder.text);
-
+  
+/**
+ * The handleSaveEdit function sets the isEditing state to false and calls the handleEditReminder
+ * function with the reminder id and editedValue as arguments.
+ */
   const handleSaveEdit = () => {
     setIsEditing(false);
     handleEditReminder(reminder.id, editedValue);

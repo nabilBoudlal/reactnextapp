@@ -8,6 +8,14 @@ function Login() {
   const [error, setError] = useState(null);
   const [isLoggingIn, setIsLoggingIn] = useState(true);
 
+/**
+ * The function handles form submission by checking if the email and password fields are filled, and
+ * then either logging in or signing up the user.
+ * @param event - The event parameter is the event object that is passed to the handleSubmit function
+ * when it is called. It contains information about the event that triggered the function, such as the
+ * form submission event.
+ * @returns The function does not explicitly return anything.
+ */
   async function handleSubmit(event) {
     event.preventDefault();
 

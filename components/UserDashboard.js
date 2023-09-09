@@ -10,6 +10,9 @@ function UserDashboard() {
   const [reminders, setReminders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+
+  /* The `useEffect` hook is used to perform side effects in a functional component. In this case, the
+  effect is triggered whenever the `currentUser` value changes. */
   useEffect(() => {
     if (currentUser) {
       const userReminderPath = `users/${currentUser.uid}/reminders`;
@@ -29,6 +32,13 @@ function UserDashboard() {
     }
   }, [currentUser]);
 
+
+ /**
+  * The function `handleAddReminder` adds a new reminder to a user's collection in a Firestore
+  * database.
+  * @returns If the `newReminderText` is empty, the function will return without performing any further
+  * actions.
+  */
   async function handleAddReminder() {
     if (!newReminderText) {
       return;
@@ -49,6 +59,16 @@ function UserDashboard() {
     }
   }
 
+/**
+ * The function `handleEditReminder` is an asynchronous function that updates the text of a reminder in
+ * a Firestore database.
+ * @param reminderId - The reminderId parameter is the unique identifier of the reminder that needs to
+ * be edited. It is used to locate the specific reminder document in the database.
+ * @param newText - The `newText` parameter is the new text that you want to update the reminder with.
+ * It is a string value.
+ * @returns If the `newText` parameter is falsy (empty, null, undefined, etc.), the function will
+ * return without performing any further actions.
+ */
   async function handleEditReminder(reminderId, newText) {
     if (!newText) {
       return;
@@ -63,6 +83,12 @@ function UserDashboard() {
     }
   }
 
+/**
+ * The function `handleDeleteReminder` is an asynchronous function that deletes a reminder from a
+ * user's collection in a Firestore database.
+ * @param reminderId - The `reminderId` parameter is the unique identifier of the reminder that needs
+ * to be deleted. It is used to locate the specific reminder document in the database and delete it.
+ */
   async function handleDeleteReminder(reminderId) {
     try {
       const userReminderPath = `users/${currentUser.uid}/reminders`;
@@ -72,7 +98,17 @@ function UserDashboard() {
       console.error("Errore durante l'eliminazione del reminder:", error);
     }
   }
+  
 
+/**
+ * The function `handleToggleCompletion` toggles the completion status of a reminder in a user's
+ * database.
+ * @param reminderId - The reminderId parameter is the unique identifier of the reminder that needs to
+ * be toggled. It is used to locate the specific reminder document in the database and update its
+ * completion status.
+ * @param completed - The `completed` parameter is a boolean value that represents the current
+ * completion status of the reminder. It indicates whether the reminder is marked as completed or not.
+ */
   async function handleToggleCompletion(reminderId, completed) {
     try {
       const userReminderPath = `users/${currentUser.uid}/reminders`;

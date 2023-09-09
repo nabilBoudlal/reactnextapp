@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
 
-export default function Header() {
+
+/**
+ * The Navbar function is a React component that renders a sticky navigation bar with a title and a
+ * user icon that opens a modal when clicked.
+ * @returns The Navbar component is returning a JSX element.
+ */
+export default function Navbar() {
   const [openModal, setOpenModal] = useState(false);
 
   return (
