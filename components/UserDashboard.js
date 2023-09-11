@@ -1,24 +1,41 @@
 import React, { useState, useEffect } from "react";
 import ReminderCard from "./ReminderCard";
-import { onSnapshot,doc, addDoc, setDoc, updateDoc, deleteDoc, collection } from "firebase/firestore";
+import { onSnapshot,doc, addDoc, setDoc, updateDoc, deleteDoc, collection, where, query } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { useAuth } from "@/context/AuthContext";
+
+/* 
+Regole accesso Firestore
+
+ service cloud.firestore {
+  match /databases/{database}/documents {
+    // Autorizza l'accesso solo agli utenti autenticati
+    match /users/{userId} {
+      allow read, write: if request.auth.uid == userId;
+      // Autorizza l'accesso ai reminder solo per l'utente corrente
+      match /reminders/{reminderId} {
+        allow read, write: if request.auth.uid == userId;
+      }
+    }
+  }
+} */
 
 function UserDashboard() {
   const { userInfo, currentUser } = useAuth();
   const [newReminderText, setNewReminderText] = useState("");
   const [reminders, setReminders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const userReminderPath = `users/${currentUser.uid}/reminders`;
 
 
   /* The `useEffect` hook is used to perform side effects in a functional component. In this case, the
   effect is triggered whenever the `currentUser` value changes. */
   useEffect(() => {
     if (currentUser) {
-      const userReminderPath = `users/${currentUser.uid}/reminders`;
       const reminderCollection = collection(db, userReminderPath);
-
-      const unsubscribe = onSnapshot(reminderCollection, (snapshot) => {
+      const q = query(reminderCollection, where("userUid", "==", currentUser.uid));
+  
+      const unsubscribe = onSnapshot(q, (snapshot) => {
         const reminderData = [];
         snapshot.forEach((doc) => {
           const data = doc.data();
@@ -27,11 +44,11 @@ function UserDashboard() {
         setReminders(reminderData);
         setLoading(false);
       });
-
+  
       return () => unsubscribe();
     }
   }, [currentUser]);
-
+  
 
  /**
   * The function `handleAddReminder` adds a new reminder to a user's collection in a Firestore
@@ -39,18 +56,19 @@ function UserDashboard() {
   * @returns If the `newReminderText` is empty, the function will return without performing any further
   * actions.
   */
-  async function handleAddReminder() {
-    if (!newReminderText) {
-      return;
-    }
-
+ async function handleAddReminder() {
+  // Validazione dei dati
+  if (!newReminderText || newReminderText.trim() === "") {
+    console.error("Il testo del reminder non è valido.");
+    return;
+  }
     try {
-      const userReminderPath = `users/${currentUser.uid}/reminders`;
       const reminderCollection = collection(db, userReminderPath);
-
+     
       await addDoc(reminderCollection, {
         text: newReminderText,
         completed: false,
+        userUid:currentUser.uid
       });
 
       setNewReminderText("");
@@ -70,12 +88,10 @@ function UserDashboard() {
  * return without performing any further actions.
  */
   async function handleEditReminder(reminderId, newText) {
-    if (!newText) {
-      return;
-    }
-
+    if (!newText || newText == "") {
+      console.error("Errore durante la modifica del reminder");
+      return; }
     try {
-      const userReminderPath = `users/${currentUser.uid}/reminders`;
       const reminderRef = doc(db, userReminderPath, reminderId);
       await updateDoc(reminderRef, { text: newText });
     } catch (error) {
@@ -91,7 +107,6 @@ function UserDashboard() {
  */
   async function handleDeleteReminder(reminderId) {
     try {
-      const userReminderPath = `users/${currentUser.uid}/reminders`;
       const reminderRef = doc(db, userReminderPath, reminderId);
       await deleteDoc(reminderRef);
     } catch (error) {
@@ -111,7 +126,6 @@ function UserDashboard() {
  */
   async function handleToggleCompletion(reminderId, completed) {
     try {
-      const userReminderPath = `users/${currentUser.uid}/reminders`;
       const reminderRef = doc(db, userReminderPath, reminderId);
       await updateDoc(reminderRef, { completed: !completed });
     } catch (error) {
