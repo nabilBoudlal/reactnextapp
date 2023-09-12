@@ -6,7 +6,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [isLoggingIn, setIsLoggingIn] = useState(true);
+  const [isFirstTime, setIsFirstTime] = useState(true);
 
 /**
  * The function handles form submission by checking if the email and password fields are filled, and
@@ -17,28 +17,29 @@ function Login() {
  * @returns The function does not explicitly return anything.
  */
   async function handleSubmit(event) {
+    /* `event.preventDefault()` is a method in JavaScript that is used to prevent the default behavior
+    of an event. In the context of this code, it is used to prevent the default form submission
+    behavior when the form is submitted. */
     event.preventDefault();
-
     if (!email || !password) {
       setError("Inserisci email e password.");
       return;
     }
 
     try {
-      if (isLoggingIn) {
-        await login(email, password);
-      } else {
-        await signUp(email, password);
-      }
-    } catch (error) {
-      setError("Credenziali non valide.");
-    }
+      if (isFirstTime) { 
+        await login(email, password); } 
+      else { 
+        await signUp(email, password); }
+    } 
+    catch (error) { 
+      setError("Credenziali non valide.");}
   }
 
   return (
     <div className="flex-1 text-xs sm:text-sm flex flex-col justify-center items-center gap-4 sm:gap-2">
       <h1 className="font-extrabold select-none text-2xl sm:text-4xl uppercase">
-        {isLoggingIn ? "Login" : "Registrati"}
+        {isFirstTime ? "Login" : "Registrati"}
       </h1>
       {error && (
         <div className="w-full max-w-[40ch] border-rose-400 border text-center border-solid text-rose-300 py-2">
@@ -73,9 +74,9 @@ function Login() {
       </form>
       <h2
         className="duration-300 hover:scale-110 cursor-pointer"
-        onClick={() => setIsLoggingIn(!isLoggingIn)}
+        onClick={() => setIsFirstTime(!isFirstTime)}
       >
-        {!isLoggingIn ? "Login" : "Registrati"}
+        {!isFirstTime ? "Login" : "Registrati"}
       </h2>
     </div>
   );

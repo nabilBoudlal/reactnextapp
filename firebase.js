@@ -3,7 +3,6 @@ import {getAuth} from 'firebase/auth'
 import {getFirestore} from 'firebase/firestore'
 import {getApp, getApps} from 'firebase/app'
 
-// TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
     apiKey: "AIzaSyAtXsypt_w1h1aAKt42EHxiS4gNWuuIZM0",
     authDomain: "fir-react-4d829.firebaseapp.com",
@@ -14,5 +13,5 @@ const firebaseConfig = {
   };
 
 const app = initializeApp(firebaseConfig)
-export const auth =getAuth(app)
-export const db= getFirestore(app)
+export const auth = getAuth(app)
+export const db = getFirestore(app)

@@ -8,6 +8,7 @@ function ReminderCard(props) {
     handleToggleCompletion,
   } = props;
 
+
   const [isEditing, setIsEditing] = useState(false);
   const [editedValue, setEditedValue] = useState(reminder.text);
   
@@ -19,6 +20,7 @@ function ReminderCard(props) {
     setIsEditing(false);
     handleEditReminder(reminder.id, editedValue);
   };
+
 
   return (
     <div className={`p-2 border relative sm:p-3 flex items-center border-white border-solid ${reminder.completed ? "opacity-50" : ""}`}>

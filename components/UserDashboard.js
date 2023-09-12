@@ -6,7 +6,6 @@ import { useAuth } from "@/context/AuthContext";
 
 /* 
 Regole accesso Firestore
-
  service cloud.firestore {
   match /databases/{database}/documents {
     // Autorizza l'accesso solo agli utenti autenticati
@@ -28,13 +27,12 @@ function UserDashboard() {
   const userReminderPath = `users/${currentUser.uid}/reminders`;
 
 
-  /* The `useEffect` hook is used to perform side effects in a functional component. In this case, the
-  effect is triggered whenever the `currentUser` value changes. */
+  /* The `useEffect` hook is used to perform side effects in a functional component. 
+  In this case, the effect is triggered whenever the `currentUser` value changes. */
   useEffect(() => {
     if (currentUser) {
       const reminderCollection = collection(db, userReminderPath);
       const q = query(reminderCollection, where("userUid", "==", currentUser.uid));
-  
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const reminderData = [];
         snapshot.forEach((doc) => {
@@ -50,27 +48,26 @@ function UserDashboard() {
   }, [currentUser]);
   
 
- /**
-  * The function `handleAddReminder` adds a new reminder to a user's collection in a Firestore
-  * database.
-  * @returns If the `newReminderText` is empty, the function will return without performing any further
-  * actions.
-  */
+ 
+/**
+ * The function `handleAddReminder` adds a new reminder to a collection in a database, with the
+ * reminder text, completion status, and user UID.
+ * @returns nothing (undefined).
+ */
  async function handleAddReminder() {
-  // Validazione dei dati
   if (!newReminderText || newReminderText.trim() === "") {
     console.error("Il testo del reminder non è valido.");
     return;
   }
     try {
       const reminderCollection = collection(db, userReminderPath);
-     
       await addDoc(reminderCollection, {
         text: newReminderText,
         completed: false,
         userUid:currentUser.uid
       });
 
+      /*Is used to clear the input field after a new  reminder has been added. */
       setNewReminderText("");
     } catch (error) {
       console.error("Errore durante l'aggiunta del reminder:", error);
@@ -133,6 +130,7 @@ function UserDashboard() {
     }
   }
 
+
   return (
     <div className="w-full max-w-[65ch] mx-auto flex flex-col gap-3 sm:gap-5">
       <div className="flex items-center text-2xl sm:text-xl font-normal">Bentornato {currentUser.email}</div>
@@ -146,9 +144,9 @@ function UserDashboard() {
         />
         <button
           onClick={handleAddReminder}
-          className="w-fit px-4 sm:px-6 py-2 sm:py-3 bg-amber-400 text-white font-medium text-base duration-300 hover:opacity-40"
+          className="w-fit px-4 sm:px-6 py-2 sm:py-3 bg-amber-400 text-black font-extrabold text-base duration-300 hover:opacity-40"
         >
-          AGGIUNGI
+          +
         </button>
       </div>
       <div className="w-fit  sm:px-6 py-2 sm:py-3 text-white font-semibold text-base">Ecco i tuoi reminders</div>

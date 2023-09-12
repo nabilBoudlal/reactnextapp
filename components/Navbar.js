@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Modal from "./Modal";
+import Modal from "./ModalWindow";
 
 
 /**
@@ -14,8 +14,8 @@ export default function Navbar() {
     <>
       {openModal && <Modal setOpenModal={setOpenModal} />}
       <div
-        className="sticky top-0 w-full left-0 flex items-center 
-    justify-between p-4  border-b border-solid border-white"
+        className="sticky top-0 w-full left-0 flex items-center justify-between 
+        p-4  border-b border-solid border-white"
       >
         <h1 className="text-3xl select-none sm:text-6xl">ReactReminder</h1>
         <i
