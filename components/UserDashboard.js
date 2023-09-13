@@ -42,7 +42,6 @@ function UserDashboard() {
         setReminders(reminderData);
         setLoading(false);
       });
-  
       return () => unsubscribe();
     }
   }, [currentUser]);
